@@ -9,6 +9,9 @@ import sys
 
 LINE = "My agent needs my written approval for everything, then flags my approval as a security risk and asks me to approve the approval."
 MAX_CHARS = 200
+# Local runs can point the output elsewhere so parallel builders sharing
+# /output do not overwrite each other: MAKEFUN_OUTPUT=/tmp/entry.txt
+OUTPUT_PATH = os.environ.get("MAKEFUN_OUTPUT", "/output/entry.txt")
 
 
 def render():
@@ -41,8 +44,8 @@ def check():
 
 
 def main():
-    os.makedirs("/output", exist_ok=True)
-    with open("/output/entry.txt", "w", encoding="utf-8") as f:
+    os.makedirs(os.path.dirname(OUTPUT_PATH) or ".", exist_ok=True)
+    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
         f.write(render())
 
 
